@@ -5,32 +5,54 @@
     <title>YouTube Audio Downloader</title>
     <style>
         body {
+            background: rgb(2,0,36);
+            background: linear-gradient(145deg, rgba(2,0,36,1) 0%, rgba(56,9,121,1) 35%, rgba(85,0,255,1) 100%);
             font-family: Arial, sans-serif;
             max-width: 500px;
-            margin: 0 auto;
-            padding: 20px;
+            margin: auto;
             text-align: center;
         }
+
+        .main_container {
+            position: absolute;
+            background-color: rgba(164, 109, 227, 0.15);
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 900px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            backdrop-filter: blur(500px);
+        }
+
         input[type="text"] {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
+            border-radius: 5px;
         }
+
         input[type="submit"] {
-            background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,251,1) 100%);
+            background: radial-gradient(circle, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 251, 1) 100%);
             color: white;
             padding: 10px 20px;
             border: none;
             cursor: pointer;
             border-radius: 5px;
         }
+
         input[type="submit"]:hover {
             background-color: #45a049;
         }
+
         #error-message {
             color: red;
             margin-top: 10px;
         }
+
         #loading {
             display: none;
             color: blue;
@@ -39,35 +61,32 @@
     </style>
 </head>
 <body>
-<!--<h1>Welcome to Lunas Official YouTube Downloader</h1>-->
 <br>
-<h1>YouTube Downloader</h1>
-<form id="download-form">
-    <input type="text" id="url" name="url" placeholder="Enter YouTube Video URL" required>
-    <input type="submit" id="download-audio" value="Download Audio">
-    <input type="submit" id="download-video" value="Download Video (WIP)" style="background: #878686; cursor: not-allowed;" disabled>
-    <br>
-</form>
-<div id="loading">Downloading... Please wait</div>
-<div class="download-progress">
-    <div id="progressBar" class="progress-bar"></div>
+<div class="main_container">
+    <div>
+        <h1 style="color: #ffffff">YouTube Downloader</h1>
+        <form id="download-form">
+            <label for="url"></label>
+            <input type="text" id="url" name="url" placeholder="Enter YouTube Video URL" required>
+            <input type="submit" id="download-audio" value="Download Audio">
+            <input type="submit" id="download-video" value="Download Video (WIP)" style="background: #878686; cursor: not-allowed;" disabled>
+            <br>
+        </form>
+        <div id="loading">Downloading... Please wait</div>
+        <div id="error-message"></div>
+
+        <h2 id="videoTitle"></h2>
+        <img id="thumbnail-container" src="" alt="thumbnail" style="width: 500px; display: none; border-radius: 5px">
+
+    </div>
 </div>
-<div id="error-message"></div>
-
-<h2 id="videoTitle"></h2>
-<img id="thumbnail-constainer" src="" alt="thumbnail" style="width: 509px; height: 339px; display: none;">
-
 <script>
-    var YT_title = null;
+    let YT_title = null;
 
-    document.getElementById('download-form').addEventListener('submit', function(e) {
+    document.getElementById('download-form').addEventListener('submit', function (e) {
         e.preventDefault();
 
-        // Reset previous states
-        const errorMessage = document.getElementById('error-message');
-        const progressInfo = document.getElementById('progress-info');
-
-        errorMessage.textContent = '';
+        document.getElementById('loading').style.display = 'block';
 
         const url = document.getElementById('url').value;
 
@@ -105,7 +124,7 @@
             });
     });
 
-    document.getElementById('url').addEventListener('change', async function() {
+    document.getElementById('url').addEventListener('change', async function () {
         const videoId = extractYouTubeVideoID(document.getElementById('url').value);
         const title = await getYouTubeVideoTitle(videoId);
 
@@ -128,8 +147,8 @@
 
             if (data.items && data.items.length > 0) {
 
-                document.getElementById('thumbnail-constainer').src = data.items[0].snippet.thumbnails.high.url;
-                document.getElementById('thumbnail-constainer').style.display = 'block';
+                document.getElementById('thumbnail-container').src = data.items[0].snippet.thumbnails.high.url;
+                document.getElementById('thumbnail-container').style.display = 'block';
 
                 return data.items[0].snippet.title;
             } else {
