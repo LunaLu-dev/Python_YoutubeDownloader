@@ -24,8 +24,9 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            border-radius: 5px;
+            border-radius: 25px;
             backdrop-filter: blur(500px);
+            padding: 20px;
         }
 
         input[type="text"] {
@@ -38,6 +39,7 @@
         input[type="submit"] {
             background: radial-gradient(circle, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 251, 1) 100%);
             color: white;
+            margin: 10px 0;
             padding: 10px 20px;
             border: none;
             cursor: pointer;
@@ -49,13 +51,13 @@
         }
 
         #error-message {
-            color: red;
+            color: #ff0000;
             margin-top: 10px;
         }
 
         #loading {
             display: none;
-            color: blue;
+            color: #ffffff;
             margin-top: 10px;
         }
     </style>
@@ -75,7 +77,7 @@
         <div id="loading">Downloading... Please wait</div>
         <div id="error-message"></div>
 
-        <h2 id="videoTitle"></h2>
+        <h2 id="videoTitle" style="color: #ffffff"></h2>
         <img id="thumbnail-container" src="" alt="thumbnail" style="width: 500px; display: none; border-radius: 5px">
 
     </div>
