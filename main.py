@@ -6,7 +6,6 @@ from flask import Flask, render_template, request, send_file
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
-socketio = SocketIO(app)
 
 # Ensure a downloads directory exists
 DOWNLOAD_FOLDER = 'downloads'
@@ -67,18 +66,6 @@ def index():
             return f"An error occurred: {str(e)}", 400
 
     return render_template('index.html')
-
-@app.route('/', methods=['POST'])
-def download():
-    for i in range(101):
-        time.sleep(0.1)
-        socketio.emit('progress', {'progress': i})
-    return 'Download complete'
-
-@socketio.on('connect')
-def handle_connect():
-    print('Client connected')
-
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5000, debug=True)
