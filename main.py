@@ -3,7 +3,6 @@ import time
 
 import yt_dlp
 from flask import Flask, render_template, request, send_file
-from flask_socketio import SocketIO, emit
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
