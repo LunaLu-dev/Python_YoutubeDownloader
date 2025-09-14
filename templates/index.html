@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>YouTube Audio Downloader</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <style>
         body {
             background: rgb(2,0,36);
@@ -71,8 +70,8 @@
         <form id="download-form">
             <label for="url"></label>
             <input type="text" id="url" name="url" placeholder="Enter YouTube Video URL" required>
-            <input type="submit" id="download-audio" value="Download Audio">
-            <input type="submit" id="download-video" value="Download Video (WIP)" style="background: #878686; cursor: not-allowed;" disabled>
+            <input onclick="isAudio = true" type="submit" id="download-audio" value="Download Audio" >
+            <input onclick="isAudio = false" type="submit" id="download-video" value="Download Video">
             <br>
         </form>
         <div id="loading">Downloading... Please wait</div>
@@ -85,6 +84,8 @@
 </div>
 <script>
     let YT_title = null;
+    let isAudio;
+    let req_url;
 
     document.getElementById('download-form').addEventListener('submit', function (e) {
         e.preventDefault();
@@ -96,7 +97,14 @@
         const form = new FormData();
         form.append('url', url);
 
-        fetch('/', {
+        if(isAudio === true){
+            req_url = "/audio"
+        }
+        else if(isAudio === false){
+            req_url = "/video"
+        }
+
+        fetch('/video', {
             method: 'POST',
             body: form
         })
