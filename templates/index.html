@@ -98,13 +98,7 @@
         form.append('url', url);
 
         if(isAudio === true){
-            req_url = "/audio"
-        }
-        else if(isAudio === false){
-            req_url = "/video"
-        }
-
-        fetch('/video', {
+            fetch('/audio', {
             method: 'POST',
             body: form
         })
@@ -133,6 +127,38 @@
             .finally(() => {
                 document.getElementById('loading').style.display = 'none';
             });
+        }
+        else if(isAudio === false){
+            fetch('/video', {
+            method: 'POST',
+            body: form
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        throw new Error(text);
+                    });
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                // Create a link and trigger download
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = YT_title + '.mp4';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(error => {
+                document.getElementById('error-message').textContent = `Error: ${error.message}`;
+            })
+            .finally(() => {
+                document.getElementById('loading').style.display = 'none';
+            });
+        }
     });
 
     document.getElementById('url').addEventListener('change', async function () {
