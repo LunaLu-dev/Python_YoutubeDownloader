@@ -5,8 +5,8 @@
     <title>YouTube Audio Downloader</title>
     <style>
         body {
-            background: rgb(2,0,36);
-            background: linear-gradient(145deg, rgba(2,0,36,1) 0%, rgba(56,9,121,1) 35%, rgba(85,0,255,1) 100%);
+            background: rgb(2, 0, 36);
+            background: linear-gradient(145deg, rgba(2, 0, 36, 1) 0%, rgba(56, 9, 121, 1) 35%, rgba(85, 0, 255, 1) 100%);
             font-family: Arial, sans-serif;
             max-width: 500px;
             margin: auto;
@@ -70,7 +70,7 @@
         <form id="download-form">
             <label for="url"></label>
             <input type="text" id="url" name="url" placeholder="Enter YouTube Video URL" required>
-            <input onclick="isAudio = true" type="submit" id="download-audio" value="Download Audio" >
+            <input onclick="isAudio = true" type="submit" id="download-audio" value="Download Audio">
             <input onclick="isAudio = false" type="submit" id="download-video" value="Download Video">
             <br>
         </form>
@@ -97,67 +97,77 @@
         const form = new FormData();
         form.append('url', url);
 
-        if(isAudio === true){
+        if (isAudio === true) {
             fetch('/audio', {
-            method: 'POST',
-            body: form
-        })
-            .then(response => {
-                if (!response.ok) {
-                    return response.text().then(text => {
-                        throw new Error(text);
-                    });
-                }
-                return response.blob();
+                method: 'POST',
+                body: form
             })
-            .then(blob => {
-                // Create a link and trigger download
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = YT_title + '.mp3';
-                document.body.appendChild(a);
-                a.click();
-                a.remove();
-                window.URL.revokeObjectURL(url);
-            })
-            .catch(error => {
-                document.getElementById('error-message').textContent = `Error: ${error.message}`;
-            })
-            .finally(() => {
-                document.getElementById('loading').style.display = 'none';
-            });
-        }
-        else if(isAudio === false){
+                .then(response => {
+                    if (!response.ok) {
+                        return response.text().then(text => {
+                            throw new Error(text);
+                        });
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    // Create a link and trigger download
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = YT_title + '.mp3';
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    window.URL.revokeObjectURL(url);
+                })
+                .catch(error => {
+                    document.getElementById('error-message').textContent = `Error: ${error.message}`;
+                })
+                .finally(() => {
+                    document.getElementById('loading').style.display = 'none';
+                });
+        } else if (isAudio === false) {
             fetch('/video', {
-            method: 'POST',
-            body: form
-        })
-            .then(response => {
-                if (!response.ok) {
-                    return response.text().then(text => {
-                        throw new Error(text);
-                    });
-                }
-                return response.blob();
+                method: 'POST',
+                body: form
             })
-            .then(blob => {
-                // Create a link and trigger download
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = YT_title + '.mp4';
-                document.body.appendChild(a);
-                a.click();
-                a.remove();
-                window.URL.revokeObjectURL(url);
-            })
-            .catch(error => {
-                document.getElementById('error-message').textContent = `Error: ${error.message}`;
-            })
-            .finally(() => {
-                document.getElementById('loading').style.display = 'none';
-            });
+                .then(response => {
+                    if (!response.ok) {
+                        return response.text().then(text => {
+                            throw new Error(text);
+                        });
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    try {
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = YT_title + '.mp4';
+                        document.body.appendChild(a);
+                        a.click();
+                        a.remove();
+                        window.URL.revokeObjectURL(url);
+                    } catch (error) {
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = YT_title + '.webm';
+                        document.body.appendChild(a);
+                        a.click();
+                        a.remove();
+                        window.URL.revokeObjectURL(url);
+                    }
+
+                })
+                .catch(error => {
+                    document.getElementById('error-message').textContent = `Error: ${error.message}`;
+                })
+                .finally(() => {
+                    document.getElementById('loading').style.display = 'none';
+                });
         }
     });
 

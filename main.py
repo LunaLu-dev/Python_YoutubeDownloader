@@ -44,11 +44,7 @@ def download_youtube_video(url):
     # Configuration for audio-only download
     ydl_opts = {
         'format': 'bestvideo+bestaudio/best',
-        'outtmpl': os.path.join(DOWNLOAD_FOLDER, '%(title)s.%(ext)s'),
-        'postprocessors': [{
-            'key': 'FFmpegVideoConvertor',
-            'preferedformat': 'mp4',
-        }]
+        'outtmpl': os.path.join(DOWNLOAD_FOLDER, '%(title)s.%(ext)s')
     }
 
     try:
@@ -60,9 +56,9 @@ def download_youtube_video(url):
             filename = ydl.prepare_filename(info_dict)
 
             # Change extension to mp3
-            mp3_filename = filename.rsplit('.', 1)[0] + '.mp4.'
+            #mp3_filename = filename.rsplit('.', 1)[0] + '.mp4.'
 
-            return mp3_filename, info_dict.get('title', 'Unknown Title')
+            return filename, info_dict.get('title', 'Unknown Title')
 
     except Exception as e:
         print(f"Download error: {e}")
